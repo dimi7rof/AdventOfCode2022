@@ -50,3 +50,6 @@ Console.WriteLine(folders.Where(x => x.Value < 100000).Sum(x => x.Value));
 
 // Part 2
 
+int result = folders.Values
+    .Where(size => size >= folders["/"] - 40000000)
+    .Min();

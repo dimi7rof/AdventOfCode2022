@@ -83,3 +83,43 @@ Console.WriteLine(sum);
 
 // Part 2
 
+string[] inputStringArray = Inputs.day8input.Split(Environment.NewLine);
+int[,] input = new int[inputStringArray[0].Length, inputStringArray.Length];
+for (int i = 0; i < inputStringArray.Length; i++)
+{
+    for (int j = 0; j < inputStringArray[0].Length; j++)
+    {
+        input[i, j] = int.Parse(inputStringArray[i][j].ToString());
+    }
+}
+List<int> list = new List<int>();
+for (int row = 0; row < input.GetLength(0); row++)
+{
+    for (int col = 0; col < input.GetLength(1); col++)
+    {
+        int[] intArr = new int[5] { input[row, col], 0, 0, 0, 0};
+        for (int l = col - 1; l >= 0; l--)
+        {
+            if (intArr[0] > input[row, l]) { intArr[1]++; }
+            else { intArr[1]++; break; }
+        }
+        for (int r = col + 1; r < input.GetLength(0); r++)
+        {
+            if (intArr[0] > input[row, r]) { intArr[2]++; }
+            else { intArr[2]++; break; }
+        }
+        for (int t = row - 1; t >= 0; t--)
+        {
+            if (intArr[0] > input[t, col]) { intArr[3]++; }
+            else { intArr[3]++; break; }
+        }
+        for (int b = row + 1; b < input.GetLength(1); b++)
+        {
+            if (intArr[0] > input[b, col]) { intArr[4]++; }
+            else { intArr[4]++; break; }
+        }       
+        list.Add(intArr[1] * intArr[2] * intArr[3] * intArr[4]);
+    }
+}
+Console.WriteLine(list.Max());
+// 595080

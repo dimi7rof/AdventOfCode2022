@@ -101,21 +101,18 @@ int trackTail(string[] input, int length = 2)
 
     foreach (var m in motions)
     {
-        ((int dx, int dy), int steps) = m;
+        ((int x1, int y1), int steps) = m;
         for (var i = 0; i < steps; i++)
         {
             (int x, int y) = rope[0];
-            rope[0] = (x + dx, y + dy);
-
+            rope[0] = (x + x1, y + y1);
             for (var j = 1; j < rope.Length; j++)
             {
                 (int prevX, int prevY) = rope[j - 1];
                 (int currX, int currY) = rope[j];
-                (int distX, int distY) = (prevX - currX, prevY - currY);
-
-                if (Math.Abs(distX) > 1 || Math.Abs(distY) > 1)
+                if (Math.Abs(prevX - currX) > 1 || Math.Abs(prevY - currY) > 1)
                 {
-                    rope[j] = (currX + Math.Sign(distX), currY + Math.Sign(distY));
+                    rope[j] = (currX + Math.Sign(prevX - currX), currY + Math.Sign(prevY - currY));
                 }
             }
             tail.Add(rope.Last());

@@ -78,3 +78,51 @@ for (int i = 0; i < inputStringArray.Length; i++)
 
 // Part2
 
+int trackTail(string[] input, int length = 2)
+{
+    var motions = input.Select(x =>
+    {
+        var split = x.Split(" ");
+        return (
+            split[0] switch
+            {
+                "L" => (-1, 0),
+                "R" => (1, 0),
+                "U" => (0, -1),
+                "D" => (0, 1),
+                _ => (0, 0)
+            },
+            int.Parse(split[1])
+        );
+    });
+
+    var rope = new (int, int)[length];
+    var tail = new HashSet<(int, int)>();
+
+    foreach (var m in motions)
+    {
+        ((int dx, int dy), int steps) = m;
+        for (var i = 0; i < steps; i++)
+        {
+            (int x, int y) = rope[0];
+            rope[0] = (x + dx, y + dy);
+
+            for (var j = 1; j < rope.Length; j++)
+            {
+                (int prevX, int prevY) = rope[j - 1];
+                (int currX, int currY) = rope[j];
+                (int distX, int distY) = (prevX - currX, prevY - currY);
+
+                if (Math.Abs(distX) > 1 || Math.Abs(distY) > 1)
+                {
+                    rope[j] = (currX + Math.Sign(distX), currY + Math.Sign(distY));
+                }
+            }
+            tail.Add(rope.Last());
+        }
+    }
+    return tail.Count;
+}
+
+var result = trackTail(inputStringArray, 10);
+Console.WriteLine(result);
